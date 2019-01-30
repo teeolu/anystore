@@ -1,0 +1,30 @@
+{
+  "name": "anystore",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "dev": "react-native run-android",
+    "tcp": "adb reverse tcp:8081 tcp:8081",
+    "android": "react-native start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "react": "16.6.3",
+    "react-native": "0.58.3",
+    "react-native-design-utility": "^0.0.30",
+    "react-native-fbsdk": "^0.8.0",
+    "react-native-vector-icons": "^6.2.0",
+    "react-navigation": "2.11.2"
+  },
+  "devDependencies": {
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "24.0.0",
+    "jest": "24.0.0",
+    "metro-react-native-babel-preset": "0.51.1",
+    "react-test-renderer": "16.6.3"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
