@@ -3,7 +3,7 @@ const color = {
 
   greyDarkest: '#242424',
   greyDarker: '#616161',
-  greyDark: '#757575',
+  greyDark: '#8E8E93',
   grey: '#9e9e9e',
   greyLight: '#bdbdbd',
   greyLighter: '#e0e0e0',
@@ -38,7 +38,7 @@ const color = {
   greenDarkest: '#1b5e20',
   greenDarker: '#2e7d32',
   greenDark: '#388e3c',
-  green: '#4caf50',
+  green: '#42B029',
   greenLight: '#66bb6a',
   greenLighter: '#81c784',
   greenLightest: '#a5d6a7',
@@ -50,6 +50,7 @@ const color = {
 const theme = {
   text: {
     size: {
+      xs: 10,
       sm: 14,
       base: 16,
       md: 18,
@@ -103,10 +104,10 @@ const theme = {
       shadowColor: color.black,
       shadowOffset: {
         width: 0,
-        height: 0,
+        height: -1,
       },
-      shadowOpacity: 1,
-      shadowRadius: 1,
+      shadowOpacity: 0.6,
+      shadowRadius: 5,
     },
     {
       shadowColor: color.black,

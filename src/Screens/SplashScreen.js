@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Box } from 'react-native-design-utility';
 import OnboardingLogo from '../commons/OnboardingLogo';
+import { inject } from "mobx-react/native";
 
 class SplashScreen extends PureComponent {
   state = {}
@@ -9,10 +10,8 @@ class SplashScreen extends PureComponent {
     this.checkAuth()
   }
 
-  checkAuth = () => {
-    setTimeout(() => {
-      this.props.navigation.navigate("Auth")
-    }, 2000);
+  checkAuth = async () => {
+    await this.props.authStore.setUpAuth();
   }
 
   render() {
@@ -24,4 +23,4 @@ class SplashScreen extends PureComponent {
   }
 }
 
-export default SplashScreen;
+export default inject("authStore")(SplashScreen);

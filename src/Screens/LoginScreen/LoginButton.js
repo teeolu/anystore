@@ -3,7 +3,7 @@ import { TouchableOpacity, Image } from 'react-native';
 import { Box, Text } from 'react-native-design-utility';
 import { images } from '../../resources/Images';
 
-const LoginButton = ({ children, icon, bgColor, type, onPress }) => {
+const LoginButton = ({ children, icon, bgColor, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <Box w="80%" self="center" p="xs" shadow={1} bg={bgColor} radius="xs" mb="sm" dir="row">

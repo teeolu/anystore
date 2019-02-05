@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react';
 import { Box, Text } from 'react-native-design-utility';
-import { Alert, Animated, Easing } from 'react-native';
+import { Animated, Alert } from 'react-native';
+import { inject, observer } from "mobx-react/native"
+import FBSDK, { LoginManager, AccessToken } from "react-native-fbsdk";
 
 import OnboardingLogo from '../../commons/OnboardingLogo';
 import LoginButton from './LoginButton';
+
 
 class LoginScreen extends PureComponent {
   state = {
@@ -21,12 +24,32 @@ class LoginScreen extends PureComponent {
     }).start()
   }
 
-  handleButtonPress = (type) => {
-    Alert.alert(type)
+  handleFacebookLogin = () => {
+    LoginManager.logInWithReadPermissions(["public_profile", "email"])
+      .then(result => {
+        if (result.isCancelled) {
+          Alert.alert("There was an issue login you in")
+        } else {
+          AccessToken.getCurrentAccessToken()
+            .then(resp => {
+              console.log("entered succesful facebook authentication", resp.accessToken.toString())
+
+              this.props.AuthStore.login(resp.accessToken.toString(), "FACEBOOK")
+
+            })
+        }
+      }, (error) => {
+        return error
+      })
+  }
+
+  handleGoogleLogin = () => {
+    Alert.alert("google")
   }
 
   render() {
     const { opacity } = this.state;
+    console.log("props from mobx ", this.props.currentUser)
 
     return (
       <Box f={1} bg="white" center>
@@ -41,7 +64,7 @@ class LoginScreen extends PureComponent {
             icon="googleIcon"
             type="google"
             bgColor="#1976d2"
-            onPress={() => this.handleButtonPress("google")}
+            onPress={() => this.handleGoogleLogin()}
           >
             Continue with google
           </LoginButton>
@@ -49,7 +72,7 @@ class LoginScreen extends PureComponent {
             icon="facebookIcon"
             type="facebook"
             bgColor="#4d6fa9"
-            onPress={() => this.handleButtonPress("facebook")}
+            onPress={() => this.handleFacebookLogin()}
           >
             Continue with facebook
           </LoginButton>
@@ -59,4 +82,5 @@ class LoginScreen extends PureComponent {
   }
 }
 
-export default LoginScreen;
+
+export default inject("AuthStore")(LoginScreen);
