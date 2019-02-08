@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import { StatusBar } from 'react-native';
 import { Box, Text } from 'react-native-design-utility';
-import { inject } from "mobx-react/native";
+import { connect } from "react-redux";
+
+
 
 class ShoppingCartScreen extends PureComponent {
   static navigationOptions = {
@@ -11,11 +13,11 @@ class ShoppingCartScreen extends PureComponent {
   state = {}
 
   renderProdList = () => {
-    const { products } = this.props.shoppingCartStore;
+    const { cartProducts } = this.props;
 
-    console.log(this.props.shoppingCartStore)
+    console.log(this.props.cartProducts)
 
-    if (products.length === 0) {
+    if (cartProducts.length === 0) {
       return (
         <Box>
           <Text>Your cart is empty</Text>
@@ -23,7 +25,7 @@ class ShoppingCartScreen extends PureComponent {
       )
     }
 
-    return products.map(product => (
+    return cartProducts.map(product => (
       <Box key={product.id} dir="row" align="center">
         <Text>{product.name}</Text>
         <Text>Qtty: {product.cartQty}</Text>
@@ -32,6 +34,8 @@ class ShoppingCartScreen extends PureComponent {
   }
 
   render() {
+    
+    
     return (
       <Box f={1} center>
         <StatusBar barStyle="light-content" />
@@ -41,4 +45,11 @@ class ShoppingCartScreen extends PureComponent {
   }
 }
 
-export default inject("shoppingCartStore")(ShoppingCartScreen);
+const mapStateToProps = ({ cart }) => {
+  return {
+    cartProducts: cart.cartProducts,
+    cartProduct: cart.cartProduct
+  }
+}
+
+export default connect(mapStateToProps)(ShoppingCartScreen);

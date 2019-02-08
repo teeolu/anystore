@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Image, ScrollView, Dimensions } from 'react-native';
 import { Box } from 'react-native-design-utility';
-import { black } from 'ansi-colors';
 
 const images = [
   require("../../resources/Images/part10/food1.png"),

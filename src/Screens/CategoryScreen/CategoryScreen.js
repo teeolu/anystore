@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Box } from 'react-native-design-utility';
-import { inject } from 'mobx-react/native';
+import { connect } from "react-redux";
 import { ScrollView } from 'react-native';
 
 import ProductCard from './ProductCard';
@@ -13,12 +13,19 @@ class CategoryScreen extends PureComponent {
   state = {}
 
   render() {
+    console.log(this.props.products)
+
     return (
       <Box>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {
-            this.props.productsStore.data.map(product => (
-              <ProductCard key={product.id} product={product} />
+            this.props.products.map((product, i) => (
+              <ProductCard
+                key={product.id}
+                index={i}
+                product={product}
+                products={this.props.products}
+              />
             ))
           }
 
@@ -28,4 +35,10 @@ class CategoryScreen extends PureComponent {
   }
 }
 
-export default inject("productsStore")(CategoryScreen);
+const mapStateToProps = ({ products }) => {
+  return {
+    products: products.products
+  }
+}
+
+export default connect(mapStateToProps)(CategoryScreen);

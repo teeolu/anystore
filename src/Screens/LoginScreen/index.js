@@ -1,11 +1,13 @@
 import React, { PureComponent } from 'react';
 import { Box, Text } from 'react-native-design-utility';
 import { Animated, Alert } from 'react-native';
-import { inject, observer } from "mobx-react/native"
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import FBSDK, { LoginManager, AccessToken } from "react-native-fbsdk";
 
 import OnboardingLogo from '../../commons/OnboardingLogo';
 import LoginButton from './LoginButton';
+import { login } from "../../Store/actions/authActions";
 
 
 class LoginScreen extends PureComponent {
@@ -32,9 +34,8 @@ class LoginScreen extends PureComponent {
         } else {
           AccessToken.getCurrentAccessToken()
             .then(resp => {
-              console.log("entered succesful facebook authentication", resp.accessToken.toString())
 
-              this.props.AuthStore.login(resp.accessToken.toString(), "FACEBOOK")
+              this.props.login(resp.accessToken.toString(), "FACEBOOK")
 
             })
         }
@@ -49,7 +50,6 @@ class LoginScreen extends PureComponent {
 
   render() {
     const { opacity } = this.state;
-    console.log("props from mobx ", this.props.currentUser)
 
     return (
       <Box f={1} bg="white" center>
@@ -82,5 +82,14 @@ class LoginScreen extends PureComponent {
   }
 }
 
+const mapStateToProps = ({ user }) => {
+  return {
+    user
+  }
+}
 
-export default inject("AuthStore")(LoginScreen);
+const mapDispatchToProps = (dispatch) => (
+  bindActionCreators({ login }, dispatch)
+)
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

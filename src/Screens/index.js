@@ -1,9 +1,13 @@
 import React, { PureComponent } from 'react';
 
 import { NavigationServices } from "../api/NavigationService";
-import { createStackNavigator, createSwitchNavigator, createBottomTabNavigator } from "react-navigation";
+import { 
+  createStackNavigator, 
+  createSwitchNavigator, 
+  createBottomTabNavigator 
+} from "react-navigation";
 import { theme } from "../constants/theme";
-import TabBar from './components/TabBar';
+import TabBar from './NavigationTabbar/TabBar';
 import ShoppingCartIcon from './ShoppingCartScreen/ShoppingCartIcon';
 
 const primaryHeader = {
@@ -31,14 +35,14 @@ const AuthNavigator = createStackNavigator(
 const HomeStack = createStackNavigator(
   {
     Home: {
-      getScreen: () => require("./HomeScreen").default
+      getScreen: () => require("../Screens/HomeScreen/HomeScreen").default
     },
     Category: {
-      getScreen: () => require("./components/CategoryScreen").default
+      getScreen: () => require("./CategoryScreen/CategoryScreen").default
     },
   },
   {
-    navigationOptions: { 
+    navigationOptions: {
       ...primaryHeader,
       headerRight: <ShoppingCartIcon />
     }
@@ -92,7 +96,7 @@ const MainNavigator = createStackNavigator(
 const AppNavigator = createSwitchNavigator(
   {
     Splash: {
-      getScreen: () => require("./SplashScreen").default
+      getScreen: () => require("./SplashScreen/SplashScreen").default
     },
     Auth: AuthNavigator,
     Main: MainNavigator
