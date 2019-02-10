@@ -8,12 +8,19 @@ import CartItem from './CartItems';
 import { theme } from '../../constants/theme';
 import { modifyProductsStore } from '../../Store/actions/productAction';
 import { addProductToCart } from '../../Store/actions/cartActions';
+import CloseBtn from '../CommonComponent/CloseBtn';
 
 
 class ShoppingCartScreen extends PureComponent {
-  static navigationOptions = {
-    title: "My cart"
-  }
+  static navigationOptions = ({ navigation }) => ({
+    title: "My cart",
+    headerLeft: <CloseBtn
+      left
+      color={"black"}
+      size={25}
+      onPress={() => navigation.goBack(null)}
+    />
+  })
 
   state = {}
 

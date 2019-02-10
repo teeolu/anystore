@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 
 import { NavigationServices } from "../api/NavigationService";
-import { 
-  createStackNavigator, 
-  createSwitchNavigator, 
-  createBottomTabNavigator 
+import {
+  createStackNavigator,
+  createSwitchNavigator,
+  createBottomTabNavigator
 } from "react-navigation";
 import { theme } from "../constants/theme";
 import TabBar from './NavigationTabbar/TabBar';
@@ -32,6 +32,35 @@ const AuthNavigator = createStackNavigator(
   }
 )
 
+const ProfileStackNavigator = createStackNavigator(
+  {
+    Profile: {
+      getScreen: () => require("./ProfileScreen").default
+    }
+  },
+  {
+    navigationOptions: {
+      headerTitleStyle: {
+        fontWeight: '400',
+      }
+    }
+  }
+)
+
+const ShoppingCartNavigator = createStackNavigator(
+  {
+    ShoppingCart: {
+      getScreen: () => require("./ShoppingCartScreen").default,
+      navigationOptions: {
+        headerStyle: {
+          backgroundColor: theme.color.white,
+        }
+      }
+    }
+
+  }
+)
+
 const HomeStack = createStackNavigator(
   {
     Home: {
@@ -39,6 +68,12 @@ const HomeStack = createStackNavigator(
     },
     Category: {
       getScreen: () => require("./CategoryScreen/CategoryScreen").default
+    },
+    ShoppingCart: {
+      screen: ShoppingCartNavigator,
+      navigationOptions: {
+        header: null
+      }
     },
   },
   {
@@ -48,6 +83,20 @@ const HomeStack = createStackNavigator(
     }
   }
 )
+
+HomeStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true;
+
+  if (
+    NavigationServices.getCurrentRouteName(navigation.state) === "ShoppingCart"
+  ) {
+    tabBarVisible = false;
+  }
+
+  return {
+    tabBarVisible
+  }
+}
 
 const TabNavigator = createBottomTabNavigator(
   {
@@ -67,26 +116,13 @@ const TabNavigator = createBottomTabNavigator(
   }
 )
 
-const ShoppingCartNavigator = createStackNavigator(
-  {
-    ShoppingCart: {
-      getScreen: () => require("./ShoppingCartScreen").default,
-      navigationOptions: {
-        headerStyle: {
-          backgroundColor: theme.color.white,
-        }
-      }
-    }
-
-  }
-)
-
 const MainNavigator = createStackNavigator(
   {
     Tab: TabNavigator,
-    ShoppingCart: ShoppingCartNavigator
+    Profile: ProfileStackNavigator
   },
   {
+    mode: "modal",
     navigationOptions: {
       header: null
     }

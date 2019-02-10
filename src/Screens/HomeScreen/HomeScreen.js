@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
 import { StatusBar, FlatList } from 'react-native';
 import { Box, Text } from 'react-native-design-utility';
+
 import CategoryCard from './CategoryCard';
 import { theme } from '../../constants/theme';
 import DealCarousel from './DealCarousels';
+import ProfileBtn from "../CommonComponent/ProfileBtn";
 
 const categories = [
   {
@@ -31,7 +33,8 @@ const NUM_COLUMNS = 3;
 
 class HomeScreen extends PureComponent {
   static navigationOptions = {
-    title: "Anystore"
+    title: "Anystore",
+    headerLeft: <ProfileBtn />
   }
 
   state = {}
