@@ -18,10 +18,10 @@ class SplashScreen extends PureComponent {
     const token = await getAuthToken();
 
     if (token) {
-      this.props.getUserInfo(token).then(res => {
-        console.log(res)
-        this.props.navigation.navigate("Main")
-      })
+      // this.props.getUserInfo(token).then(res => {
+
+      this.props.navigation.navigate("Main")
+      // })
     } else {
       this.props.navigation.navigate("Auth")
     }

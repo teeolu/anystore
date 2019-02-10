@@ -1,4 +1,4 @@
-import { INC_CART_QTY, DEC_CART_QTY } from "./types";
+import { INC_CART_QTY, DEC_CART_QTY, MOD_PROD_STORE } from "./types";
 
 
 
@@ -14,6 +14,14 @@ export const decCartQty = (products) => {
 
   return {
     type: DEC_CART_QTY,
+    payload: products
+  }
+}
+
+export const modifyProductsStore = (products) => {
+
+  return {
+    type: MOD_PROD_STORE,
     payload: products
   }
 }

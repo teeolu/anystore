@@ -4,11 +4,11 @@ import { connect } from "react-redux";
 import { Animated } from 'react-native';
 import { bindActionCreators } from "redux";
 
-import { incCartQty, decCartQty } from "../../Store/actions/productAction";
+import { incCartQty, decCartQty, modifyProductsStore } from "../../Store/actions/productAction";
 import { addProductToCart } from "../../Store/actions/cartActions";
 import ProductDetail from './ProductDetail';
 import ProductPlusButton from './ProductPlusButton';
-import ProductIsHover from './ProductIsHover';
+import ProductIsHover from '../CommonComponent/ProductIsHover';
 
 
 class ProductCard extends Component {
@@ -16,6 +16,7 @@ class ProductCard extends Component {
     isHover: false,
     cardOpacity: new Animated.Value(1)
   }
+
 
   fadeIn = () => {
     Animated.timing(this.state.cardOpacity, {
@@ -32,43 +33,63 @@ class ProductCard extends Component {
   }
 
   handlePlusPress = () => {
-    let cartArray = [...this.props.cartProducts];
-
-    this.fadeIn();
     this.setState({ isHover: true });
-
-    cartArray.unshift(this.props.product);
-    this.props.addProductToCart(cartArray);
+    if (this.props.product.cartQty === 0) {
+      this.handleInc()
+    }
   }
 
+
   closeHoverState = () => {
-    this.fadeOut();
     this.setState({ isHover: false });
   }
 
+  addToCart = () => {
+    const cartArray = [...this.props.cartProducts];
+    const inCartIndex = cartArray.findIndex(el => el.id === this.props.product.id)
+
+    if (inCartIndex !== -1) {
+      cartArray.splice(inCartIndex, 1, { ...this.props.product, inCart: true })
+      this.props.addProductToCart(cartArray)
+    } else {
+      cartArray.unshift(this.props.product);
+      this.props.addProductToCart(cartArray);
+    }
+  }
+
+  removeFromCart = () => {
+    const cartArray = [...this.props.cartProducts];
+    const newCartArray = cartArray.filter(el => el.id !== this.props.product.id)
+    const products = [...this.props.products]
+    const product = { ...this.props.product, inCart: false, cartQty: 0 };
+
+    products.splice(this.props.index, 1, product);
+
+    this.props.modifyProductsStore(products)
+    this.props.addProductToCart(newCartArray);
+    this.closeHoverState()
+  }
+
   handleInc = () => {
+    const products = [...this.props.products];
+    const entry = this.props.index;
 
-    const newProducts = [...this.props.products]
+    if (entry !== -1) {
+      this.addToCart()
+      const product = { ...products[entry], cartQty: this.props.product.cartQty + 1 }
 
-    const entry = this.props.index
+      products.splice(entry, 1, product)
 
-    if (entry || entry === 0) {
-
-      const product = { ...newProducts[entry], cartQty: this.props.product.cartQty + 1 }
-
-      newProducts.splice(entry, 1, product)
-
-      this.props.incCartQty(newProducts)
+      this.props.incCartQty(products)
     }
   }
 
   handleDec = () => {
-
     const newProducts = [...this.props.products]
-
     const entry = this.props.index
 
     if (entry || entry === 0) {
+      this.addToCart()
 
       const product = { ...newProducts[entry], cartQty: this.props.product.cartQty - 1 }
 
@@ -98,7 +119,14 @@ class ProductCard extends Component {
           handleDec={() => this.handleDec()}
           handleInc={() => this.handleInc()}
           product={this.props.product}
+          removeFromCart={() => this.removeFromCart()}
           closeHoverState={() => this.closeHoverState()}
+          containerStyle={{
+            top: 10,
+            left: 10,
+            right: 10,
+            zIndex: 10
+          }}
         />
       </Box>
 
@@ -113,7 +141,12 @@ const mapStateToProps = ({ cart }) => {
 }
 
 const mapDispatchToProps = (dispatch) => (
-  bindActionCreators({ incCartQty, decCartQty, addProductToCart }, dispatch)
+  bindActionCreators({
+    incCartQty,
+    decCartQty,
+    addProductToCart,
+    modifyProductsStore
+  }, dispatch)
 )
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductCard);
